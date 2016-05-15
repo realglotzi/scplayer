@@ -84,19 +84,19 @@ public class SpotifyConnectPlayerImpl implements SpotifyConnectPlayer {
 	private boolean threadPumpEventsStop = false;
 
 	public SpotifyConnectPlayerImpl() {
-		this(new File("./spotify_appkey.key"));
+		this(new File("./spotify_appkey.key"), ".");
 	}
 
-	public SpotifyConnectPlayerImpl(File appKey) {
-		this(appKey, new File("./libspotify_embedded_shared.so"));
+	public SpotifyConnectPlayerImpl(File appKey, String libSpotifyPath) {
+		this(appKey, new File(libSpotifyPath + "/" + "libspotify_embedded_shared.so"));
 	}
 
 	public SpotifyConnectPlayerImpl(File appKey, File library) {
 		this(appKey, library, UUID.randomUUID().toString());
 	}
 
-	public SpotifyConnectPlayerImpl(File appKey, String deviceId) {
-		this(appKey, new File("./libspotify_embedded_shared.so"), deviceId);
+	public SpotifyConnectPlayerImpl(File appKey, String deviceId, String libSpotifyPath) {
+		this(appKey, new File(libSpotifyPath + "/" + "libspotify_embedded_shared.so"), deviceId);
 	}
 
 	public SpotifyConnectPlayerImpl(File appKey, File library, String deviceId) throws IllegalArgumentException {
@@ -105,6 +105,7 @@ public class SpotifyConnectPlayerImpl implements SpotifyConnectPlayer {
 				log.warn("Already Initialized");
 				throw new IllegalArgumentException("Already Initialized");
 			}
+			log.info("load spotify library " + library.getName());
 			spotifyLib = (SpotifyLibrary) Native.loadLibrary(library.getAbsolutePath(), SpotifyLibrary.class);
 
 			log.info("init");

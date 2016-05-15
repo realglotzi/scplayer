@@ -76,11 +76,19 @@ public class SCPlayerMain {
 		username = System.getProperty("username", (username != null ? username:null));
 		password = System.getProperty("password", (password != null ? password:null));
 		int bitrate = Integer.getInteger("bitrate", SpBitrate.kSpBitrate320k);
+		String libSpotifyPath = System.getProperty("libspotify.path", ".");
 		
 		File appKey = new File(appKeyLocation);
 		
 		if (!appKey.exists()) {
 			log.error("appkey not found");
+			System.exit(-1);
+		}
+
+		File libSpotify = new File(libSpotifyPath);
+		
+		if (!libSpotify.exists()) {
+			log.error("libspotify.path not found");
 			System.exit(-1);
 		}
 
@@ -99,7 +107,7 @@ public class SCPlayerMain {
 			return;
 		}
 
-		final SpotifyConnectPlayer player = new SpotifyConnectPlayerImpl(appKey, deviceId);
+		final SpotifyConnectPlayer player = new SpotifyConnectPlayerImpl(appKey, deviceId, libSpotifyPath);
 		
 
 		player.addAuthenticationListener(new AuthenticationListener() {
