@@ -61,13 +61,7 @@ public class SCPlayerMain {
 	}
 
 	public static void main(String[] args) throws Exception {
-		initLogger();
 		
-		Integer debug = Integer.getInteger("debug", 0);
-		Logger.getRootLogger().setLevel(logLevel.get(debug));
-		
-		verifyCredentialFile(credentials);
-
 		Boolean standalone = Boolean.getBoolean("standalone");
 		Integer webPort = Integer.getInteger("web.port", 4000);
 		String appKeyLocation = System.getProperty("app.key", "./spotify_appkey.key");
@@ -77,6 +71,14 @@ public class SCPlayerMain {
 		password = System.getProperty("password", (password != null ? password:null));
 		int bitrate = Integer.getInteger("bitrate", SpBitrate.kSpBitrate320k);
 		String libSpotifyPath = System.getProperty("libspotify.path", ".");
+		String logFile = System.getProperty("log.file", "./scplayer.log");
+
+		initLogger(logFile);
+
+		Integer debug = Integer.getInteger("debug", 0);
+		Logger.getRootLogger().setLevel(logLevel.get(debug));
+
+		verifyCredentialFile(credentials);
 		
 		File appKey = new File(appKeyLocation);
 		
@@ -306,7 +308,7 @@ public class SCPlayerMain {
 		}
 	}
 	
-	private static void initLogger() {
+	private static void initLogger(String logFile) {
 		// This is the root logger provided by log4j
 		Logger rootLogger = Logger.getRootLogger();
 
@@ -315,7 +317,7 @@ public class SCPlayerMain {
 
 		try {
 			// Define file appender with layout and output log file name
-			RollingFileAppender fileAppender = new RollingFileAppender(layout, "./scplayer.log");
+			RollingFileAppender fileAppender = new RollingFileAppender(layout, logFile);
 			fileAppender.setImmediateFlush(true);
 			fileAppender.setThreshold(Level.DEBUG);
 			fileAppender.setAppend(true);
