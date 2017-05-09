@@ -289,7 +289,7 @@ public class SpotifyConnectPlayerImpl implements SpotifyConnectPlayer {
 			}
 		};
 		spPlaybackCallbacks.apply_volume = new SpPlaybackCallbacks.apply_volume_callback() {
-			public void apply(short volume, Pointer userdata) {
+			public void apply(int volume, Pointer userdata) {
 				for (PlayerListener playerListener : playerListeners) {
 					playerListener.onVolumeChanged(volume);
 				}
@@ -384,7 +384,7 @@ public class SpotifyConnectPlayerImpl implements SpotifyConnectPlayer {
 	}
 
 	@Override
-	public short getVolume() {
+	public int getVolume() {
 		try {
 			libLock.lock();
 			return spotifyLib.SpPlaybackGetVolume();
@@ -520,7 +520,7 @@ public class SpotifyConnectPlayerImpl implements SpotifyConnectPlayer {
 	}
 
 	@Override
-	public void volume(short volume) {
+	public void volume(int volume) {
 		try {
 			libLock.lock();
 			spotifyLib.SpPlaybackUpdateVolume(volume);
